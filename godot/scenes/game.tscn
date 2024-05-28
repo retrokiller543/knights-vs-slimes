@@ -489,6 +489,15 @@ zoom = Vector2(4, 4)
 limit_bottom = 170
 position_smoothing_enabled = true
 
+[node name="DeathLable" type="Label" parent="Player"]
+offset_left = -64.0
+offset_top = -39.0
+offset_right = 64.0
+offset_bottom = -16.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_1mybq")
+text = "You died!"
+
 [node name="Killzone" parent="." instance=ExtResource("5_bl1xu")]
 position = Vector2(-5, 251)
 
@@ -551,6 +560,9 @@ libraries = {
 }
 autoplay = "move"
 
+[node name="Platform3" parent="Platforms" instance=ExtResource("3_ydaom")]
+position = Vector2(-216, -33)
+
 [node name="Coins" type="Node" parent="."]
 
 [node name="Coin" parent="Coins" instance=ExtResource("4_bca7x")]
@@ -583,6 +595,27 @@ position = Vector2(729, 57)
 [node name="Coin10" parent="Coins" instance=ExtResource("4_bca7x")]
 position = Vector2(944, 106)
 
+[node name="Coin11" parent="Coins" instance=ExtResource("4_bca7x")]
+position = Vector2(-511, 10)
+
+[node name="Coin12" parent="Coins" instance=ExtResource("4_bca7x")]
+position = Vector2(-729, -7)
+
+[node name="Coin13" parent="Coins" instance=ExtResource("4_bca7x")]
+position = Vector2(-685, -38)
+
+[node name="Coin14" parent="Coins" instance=ExtResource("4_bca7x")]
+position = Vector2(-436, -24)
+
+[node name="Coin15" parent="Coins" instance=ExtResource("4_bca7x")]
+position = Vector2(-288, -32)
+
+[node name="Coin16" parent="Coins" instance=ExtResource("4_bca7x")]
+position = Vector2(-217, -45)
+
+[node name="Coin17" parent="Coins" instance=ExtResource("4_bca7x")]
+position = Vector2(-122, -4)
+
 [node name="Slimes" type="Node" parent="."]
 
 [node name="Slime" parent="Slimes" instance=ExtResource("6_dbss5")]
@@ -591,29 +624,5 @@ position = Vector2(148, 85)
 [node name="Slime2" parent="Slimes" instance=ExtResource("6_dbss5")]
 position = Vector2(434, 52)
 
-[node name="Platform" parent="." instance=ExtResource("3_ydaom")]
-position = Vector2(-216, -33)
-
-[node name="Slime" parent="." instance=ExtResource("6_dbss5")]
+[node name="Slime3" parent="Slimes" instance=ExtResource("6_dbss5")]
 position = Vector2(-532, 4)
-
-[node name="Coin" parent="." instance=ExtResource("4_bca7x")]
-position = Vector2(-511, 10)
-
-[node name="Coin2" parent="." instance=ExtResource("4_bca7x")]
-position = Vector2(-729, -7)
-
-[node name="Coin3" parent="." instance=ExtResource("4_bca7x")]
-position = Vector2(-685, -38)
-
-[node name="Coin4" parent="." instance=ExtResource("4_bca7x")]
-position = Vector2(-436, -24)
-
-[node name="Coin5" parent="." instance=ExtResource("4_bca7x")]
-position = Vector2(-288, -32)
-
-[node name="Coin6" parent="." instance=ExtResource("4_bca7x")]
-position = Vector2(-217, -45)
-
-[node name="Coin7" parent="." instance=ExtResource("4_bca7x")]
-position = Vector2(-122, -4)
