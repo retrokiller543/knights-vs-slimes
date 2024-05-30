@@ -10,7 +10,7 @@ bg_color = Color(1, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_78wfh"]
 bg_color = Color(3.36915e-06, 0.725809, 0.187875, 1)
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_f8fns")
 
 [node name="Control" type="Control" parent="."]

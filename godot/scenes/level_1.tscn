@@ -525,14 +525,25 @@ shape = SubResource("WorldBoundaryShape2D_hd8tl")
 [node name="Lables" type="Node" parent="."]
 
 [node name="Label" type="Label" parent="Lables"]
-offset_left = -12.0
-offset_top = 4.0
-offset_right = 74.0
-offset_bottom = 15.0
+offset_left = -13.0
+offset_top = -46.0
+offset_right = 73.0
+offset_bottom = -35.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_q2npl")
 theme_override_font_sizes/font_size = 8
 text = "Space to jump"
+
+[node name="Label5" type="Label" parent="Lables"]
+offset_left = 55.0
+offset_top = 33.0
+offset_right = 140.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_q2npl")
+theme_override_font_sizes/font_size = 8
+text = "ESC to go back to the menu"
+autowrap_mode = 2
 
 [node name="Label3" type="Label" parent="Lables"]
 offset_left = 158.0
@@ -644,3 +655,6 @@ position = Vector2(434, 52)
 
 [node name="Slime3" parent="Slimes" instance=ExtResource("9_7f8a6")]
 position = Vector2(-532, 4)
+
+[connection signal="death" from="Player" to="HUD" method="_on_player_death"]
+[connection signal="hurt" from="Player" to="HUD" method="_on_player_hurt"]

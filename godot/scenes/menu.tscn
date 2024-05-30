@@ -1,0 +1,88 @@
+[gd_scene load_steps=4 format=3 uid="uid://congmhoyit151"]
+
+[ext_resource type="FontFile" uid="uid://dbjl1e6kdxpl6" path="res://assets/fonts/PixelOperator8.ttf" id="1_7yfi7"]
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_cdatu"]
+[ext_resource type="Texture2D" uid="uid://cotwwfhli0v0r" path="res://assets/images/background-img.webp" id="2_m83pv"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+script = ExtResource("1_cdatu")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BgImage" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_m83pv")
+expand_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+
+[node name="NotImplemented" type="Label" parent="CanvasLayer/VBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_7yfi7")
+theme_override_font_sizes/font_size = 48
+text = "This is not implemented yet!"
+
+[node name="NotImplementedTimer" type="Timer" parent="CanvasLayer/VBoxContainer2"]
+wait_time = 3.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -96.0
+offset_right = 128.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_7yfi7")
+theme_override_font_sizes/font_size = 32
+text = "Start"
+
+[node name="OptionsButton" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_7yfi7")
+theme_override_font_sizes/font_size = 32
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_7yfi7")
+theme_override_font_sizes/font_size = 32
+text = "Quit"
+
+[connection signal="timeout" from="CanvasLayer/VBoxContainer2/NotImplementedTimer" to="." method="_on_not_implemented_timer_timeout"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

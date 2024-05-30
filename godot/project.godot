@@ -21,6 +21,7 @@ Music="*res://scenes/music.tscn"
 
 [editor]
 
+movie_writer/movie_file="E:/GoDOT/FirstGame/godot/assets/videos/movie.avi"
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 

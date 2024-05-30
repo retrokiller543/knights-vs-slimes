@@ -1,4 +1,4 @@
-use godot::engine::{CharacterBody2D, ICharacterBody2D, AnimatedSprite2D, Timer, Engine};
+use godot::engine::{CharacterBody2D, ICharacterBody2D, AnimatedSprite2D, Timer, Engine, InputEvent};
 use godot::engine::ProjectSettings;
 use godot::prelude::*;
 
@@ -226,6 +226,19 @@ impl ICharacterBody2D for Player {
                 }
                 animated_sprite_2d.play();
             }
+        }
+    }
+
+    fn unhandled_input(&mut self, event: Gd<InputEvent>,) {
+        // if key is ui_cancel, load the main menu instead of the current scene
+        if event.is_action_pressed("ui_cancel".into()) {
+            Engine::singleton().set_time_scale(1.0);
+
+            Engine::singleton()
+            .get_main_loop()
+            .unwrap()
+            .cast::<SceneTree>()
+            .change_scene_to_file("res://scenes/game.tscn".into());
         }
     }
 }
