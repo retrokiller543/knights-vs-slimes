@@ -1,9 +1,15 @@
 use godot::engine::{Area2D, CollisionShape2D, Engine, IArea2D, Timer};
 use godot::prelude::*;
 
+use crate::player::Player;
+
 #[derive(GodotClass)]
 #[class(base=Area2D)]
 pub struct Killzone {
+    #[export]
+    damage: i32,
+
+    // should maybe generate the timer instead of importing it/having it the end user put into the tree
     timer: Option<Gd<Timer>>,
 
     base: Base<Area2D>,
@@ -11,19 +17,18 @@ pub struct Killzone {
 
 #[godot_api]
 impl Killzone {
+    #[signal]
+    fn killzone_entered();
+
     #[func]
+    /// # Handles the death of the player when it collides with the killzone
     fn on_body_entered(&mut self, body: Gd<Node2D>) {
-        godot_print!("Body entered: {:?}", body);
+        self.base_mut().emit_signal("killzone_entered".into(), &[]);
 
-        Engine::singleton().set_time_scale(0.5);
-
-        let mut collision = body.get_node_as::<CollisionShape2D>("CollisionShape2D");
-
-        collision.queue_free();
-
-        if let Some(ref mut timer) = self.timer {
-            godot_print!("Starting timer!");
-            timer.start();
+        let class = body.get_class();
+        if class == "Player".into() {
+            let mut player = body.get_node_as::<Player>(".");
+            player.bind_mut().take_damage(self.damage);
         }
     }
 
@@ -43,15 +48,15 @@ impl Killzone {
 impl IArea2D for Killzone {
     fn init(base: Base<Area2D>) -> Self {
         Self {
+            damage: 1,
             timer: None,
             base
         }
     }
 
     fn ready(&mut self) {
-        if let timer = self.base().get_node_as::<Timer>("Timer") {
-            self.timer = Some(timer);
-        }
+        let timer = self.base().get_node_as::<Timer>("Timer");
+        self.timer = Some(timer);
 
         let callable = Callable::from_object_method(&self.to_gd(), "on_body_entered");
         let timer_callable = Callable::from_object_method(&self.to_gd(), "on_timer_timeout");

@@ -1,6 +1,38 @@
-[gd_scene load_steps=25 format=3 uid="uid://brov5sw0pd57m"]
+[gd_scene load_steps=33 format=3 uid="uid://brov5sw0pd57m"]
 
 [ext_resource type="Texture2D" uid="uid://b8cmjj8vq3r8d" path="res://assets/sprites/knight.png" id="1_4hury"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3b3y"]
+atlas = ExtResource("1_4hury")
+region = Rect2(0, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cr4wv"]
+atlas = ExtResource("1_4hury")
+region = Rect2(32, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_osee5"]
+atlas = ExtResource("1_4hury")
+region = Rect2(64, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8tgpt"]
+atlas = ExtResource("1_4hury")
+region = Rect2(96, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_btfr5"]
+atlas = ExtResource("1_4hury")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eme6k"]
+atlas = ExtResource("1_4hury")
+region = Rect2(32, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wpgql"]
+atlas = ExtResource("1_4hury")
+region = Rect2(64, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hoko7"]
+atlas = ExtResource("1_4hury")
+region = Rect2(96, 192, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vo230"]
 atlas = ExtResource("1_4hury")
@@ -90,6 +122,40 @@ region = Rect2(224, 96, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_j3b3y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cr4wv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_osee5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8tgpt")
+}],
+"loop": false,
+"name": &"death",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_btfr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eme6k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wpgql")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hoko7")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_vo230")
 }, {
 "duration": 1.0,
@@ -176,9 +242,13 @@ collision_layer = 2
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_rt7sp")
-animation = &"jump"
+animation = &"hurt"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_7vp2b")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true

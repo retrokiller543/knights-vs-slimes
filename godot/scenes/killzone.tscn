@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://dgvw2clki1hwm"]
+[gd_scene load_steps=2 format=3 uid="uid://dgvw2clki1hwm"]
+
+[ext_resource type="Script" path="res://scripts/killzone.gd" id="1_5hjs1"]
 
 [node name="Killzone" type="Killzone"]
 collision_mask = 2
+script = ExtResource("1_5hjs1")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.6

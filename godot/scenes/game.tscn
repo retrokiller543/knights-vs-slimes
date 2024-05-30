@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://24q3dfvpv82r"]
+[gd_scene load_steps=19 format=3 uid="uid://24q3dfvpv82r"]
 
 [ext_resource type="PackedScene" uid="uid://brov5sw0pd57m" path="res://scenes/player.tscn" id="1_25kro"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_polpu"]
@@ -9,6 +9,22 @@
 [ext_resource type="PackedScene" uid="uid://dgvw2clki1hwm" path="res://scenes/killzone.tscn" id="5_bl1xu"]
 [ext_resource type="PackedScene" uid="uid://txtwn2nxr0jq" path="res://scenes/slime.tscn" id="6_dbss5"]
 [ext_resource type="FontFile" uid="uid://dbjl1e6kdxpl6" path="res://assets/fonts/PixelOperator8.ttf" id="7_34von"]
+
+[sub_resource type="Sky" id="Sky_u5iqf"]
+
+[sub_resource type="Environment" id="Environment_3puks"]
+sky = SubResource("Sky_u5iqf")
+sky_custom_fov = 52.5
+ambient_light_color = Color(0.721569, 0.580392, 0, 0.498039)
+ambient_light_energy = 0.58
+reflected_light_source = 2
+ssao_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0903
+volumetric_fog_emission_energy = 91.84
+volumetric_fog_sky_affect = 0.8
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_wyoky"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lgaoa"]
 texture = ExtResource("2_eak8a")
@@ -456,6 +472,10 @@ _data = {
 
 [node name="Game" type="Node2D"]
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3puks")
+camera_attributes = SubResource("CameraAttributesPractical_wyoky")
+
 [node name="GameManager" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_polpu")
@@ -496,12 +516,12 @@ offset_right = 64.0
 offset_bottom = -16.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_1mybq")
-text = "You died!"
 
-[node name="Killzone" parent="." instance=ExtResource("5_bl1xu")]
+[node name="WorldKillzone" parent="." instance=ExtResource("5_bl1xu")]
+damage = 99999999
 position = Vector2(-5, 251)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldKillzone"]
 shape = SubResource("WorldBoundaryShape2D_1eel6")
 
 [node name="Lables" type="Node" parent="."]
