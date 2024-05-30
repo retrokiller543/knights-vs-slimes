@@ -33,11 +33,11 @@ pub enum PlayerState {
 #[godot_api]
 impl Player {
     #[signal]
-    fn on_jump();
+    fn jump();
     #[signal]
-    fn on_hurt(new_health: i32);
+    fn hurt(new_health: i32);
     #[signal]
-    fn on_death();
+    fn death();
 
     #[func]
     pub fn take_damage(&mut self, amount: i32) {
@@ -46,23 +46,25 @@ impl Player {
         }
 
         let new_health = self.health - amount;
+        self.base_mut().emit_signal("hurt".into(), &[new_health.to_variant()]);
 
         if new_health <= 0 {
             self.state = PlayerState::Dead;
-            self.base_mut().emit_signal("on_death".into(), &[]);
+            self.base_mut().emit_signal("death".into(), &[]);
             Engine::singleton().set_time_scale(0.5);
 
             let mut animated_sprite_2d = self.base_mut().get_node_as::<AnimatedSprite2D>("AnimatedSprite2D");
             animated_sprite_2d.set_animation("death".into());
 
+            // Set velocity to zero when dead
+            self.base_mut().set_velocity(Vector2::ZERO);
+
             if let Some(ref mut timer) = self.timer {
                 timer.start();
             }
         } else {
-            self.base_mut().emit_signal("on_hurt".into(), &[new_health.to_variant()]);
             self.apply_damage_effect();
         }
-
         self.health = new_health;
     }
 
@@ -87,23 +89,33 @@ impl Player {
     }
 
     fn update_velocity(&mut self, delta: f64) -> Vector2 {
+        if self.state == PlayerState::Dead {
+            return self.base().get_velocity();
+        }
+
         let gravity: f32 = ProjectSettings::singleton().get_setting("physics/2d/default_gravity".into()).to();
         let mut velocity = self.base().get_velocity();
         if !self.base().is_on_floor() {
             velocity.y += gravity * delta as f32;
         }
 
-        let input = Input::singleton();
-        if input.is_action_just_pressed("jump".into()) && self.base().is_on_floor() && self.health > 0 {
-            velocity.y = self.jump_velocity;
-            self.base_mut().emit_signal("on_jump".into(), &[]);
-        }
+        if self.state != PlayerState::Hurt {
+            let input = Input::singleton();
+            if input.is_action_just_pressed("jump".into()) && self.base().is_on_floor() {
+                velocity.y = self.jump_velocity;
+                self.base_mut().emit_signal("jump".into(), &[]);
+            }
 
-        let direction = self.get_direction();
-        if direction != 0.0 && self.health > 0 && self.state != PlayerState::Hurt && self.state != PlayerState::Dead {
-            velocity.x = direction * self.speed;
-        } else if self.health > 0 && self.state != PlayerState::Hurt && self.state != PlayerState::Dead {
-            velocity.x = 0.0;
+            let direction = self.get_direction();
+            if direction != 0.0 {
+                self.state = PlayerState::Running;
+                velocity.x = direction * self.speed;
+            } else {
+                velocity.x = 0.0;
+                if self.base().is_on_floor() {
+                    self.state = PlayerState::Idle;
+                }
+            }
         }
 
         self.base_mut().set_velocity(velocity);
@@ -126,7 +138,6 @@ impl Player {
     #[func]
     fn on_animation_finished(&mut self) {
         if let Some(ref mut animator) = self.animator {
-            godot_print!("Animation finished: {}", animator.get_animation());
             if animator.get_animation() == "hurt".into() {
                 self.state = PlayerState::Idle;
             } else if animator.get_animation() == "death".into() {
@@ -183,7 +194,7 @@ impl ICharacterBody2D for Player {
     }
 
     fn to_string(&self) -> GString {
-        format!("Player(speed={}, jump_velocity={})", self.speed, self.jump_velocity).into()
+        format!("Player(speed={}, jump_velocity={}, state={:?}, health={:?})", self.speed, self.jump_velocity, self.state, self.health).into()
     }
 
     fn physics_process(&mut self, delta: f64) {
@@ -192,25 +203,29 @@ impl ICharacterBody2D for Player {
         let velocity = self.update_velocity(delta);
 
         // Handle animations
-        if self.state == PlayerState::Hurt || self.state == PlayerState::Dead {
-            animated_sprite_2d.play();
-            return;
-        }
-
-        if self.base().is_on_floor() && self.health > 0 {
-            if velocity.x == 0.0 {
-                self.state = PlayerState::Idle;
-                animated_sprite_2d.set_animation("idle".into());
-            } else {
-                self.state = PlayerState::Running;
-                animated_sprite_2d.set_animation("run".into());
-                animated_sprite_2d.set_flip_h(velocity.x < 0.0);
+        match self.state {
+            PlayerState::Hurt => {
+                animated_sprite_2d.play();
+            },
+            PlayerState::Dead => {
+                animated_sprite_2d.play();
+            },
+            _ => {
+                if self.base().is_on_floor() {
+                    if velocity.x == 0.0 {
+                        self.state = PlayerState::Idle;
+                        animated_sprite_2d.set_animation("idle".into());
+                    } else {
+                        self.state = PlayerState::Running;
+                        animated_sprite_2d.set_animation("run".into());
+                        animated_sprite_2d.set_flip_h(velocity.x < 0.0);
+                    }
+                } else {
+                    self.state = PlayerState::Jumping;
+                    animated_sprite_2d.set_animation("jump".into());
+                }
+                animated_sprite_2d.play();
             }
-        } else if self.health > 0 {
-            self.state = PlayerState::Jumping;
-            animated_sprite_2d.set_animation("jump".into());
         }
-
-        animated_sprite_2d.play();
     }
 }

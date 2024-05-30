@@ -130,12 +130,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_osee5")
 }, {
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_8tgpt")
 }],
 "loop": false,
 "name": &"death",
-"speed": 10.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -242,7 +242,7 @@ collision_layer = 2
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_rt7sp")
-animation = &"hurt"
+animation = &"death"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -250,5 +250,5 @@ position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_7vp2b")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.6
+wait_time = 0.7
 one_shot = true

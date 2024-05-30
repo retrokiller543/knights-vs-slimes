@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
+crate-type = ["cdylib", "lib"]  # Compile this crate to a dynamic C library.
 
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
@@ -14,7 +14,8 @@ once_cell = { version =  "1.19.0", optional = true }
 tokio = { version = "1.37.0", features = ["full"], optional = true }
 
 [features]
-default = []
+default = ["gdext"]
 db = ["dep:surrealdb", "dep:once_cell", "tokio", "serde"]
 tokio = ["dep:tokio"]
 serde = ["dep:serde"]
+gdext = []
