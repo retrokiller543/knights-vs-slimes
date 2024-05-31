@@ -1,0 +1,80 @@
+[gd_scene load_steps=10 format=3 uid="uid://dk3nwsew81uda"]
+
+[ext_resource type="Script" path="res://scripts/enemy_knight.gd" id="1_5fgba"]
+[ext_resource type="Texture2D" uid="uid://bglcupxv2f1ax" path="res://assets/sprites/dark_knight.png" id="1_cp7tt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8yba"]
+atlas = ExtResource("1_cp7tt")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aagsv"]
+atlas = ExtResource("1_cp7tt")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7h66"]
+atlas = ExtResource("1_cp7tt")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vw71x"]
+atlas = ExtResource("1_cp7tt")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o5755"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o8yba")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aagsv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7h66")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vw71x")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4ct6j"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_agbwe"]
+radius = 68.0
+
+[node name="bird" type="CharacterBody2D"]
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_5fgba")
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_o5755")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7)
+shape = SubResource("CircleShape2D_4ct6j")
+
+[node name="reset_nav_path" type="Timer" parent="."]
+
+[node name="Killzone" type="Killzone" parent="."]
+damage = 2
+collision_mask = 2
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Killzone"]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_agbwe")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Timer" type="Timer" parent="Killzone"]
+wait_time = 0.6
+one_shot = true
+
+[connection signal="timeout" from="reset_nav_path" to="." method="_on_reset_nav_path_timeout"]

@@ -1,0 +1,103 @@
+[gd_scene load_steps=12 format=3 uid="uid://dkrwmewhaxifa"]
+
+[ext_resource type="Script" path="res://scripts/enemy_knight.gd" id="1_goi45"]
+[ext_resource type="Script" path="res://scripts/bird_enemy_manager.gd" id="1_lk40s"]
+[ext_resource type="Texture2D" uid="uid://bglcupxv2f1ax" path="res://assets/sprites/dark_knight.png" id="2_j3ywg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ftjin"]
+size = Vector2(564, 168)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8yba"]
+atlas = ExtResource("2_j3ywg")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aagsv"]
+atlas = ExtResource("2_j3ywg")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7h66"]
+atlas = ExtResource("2_j3ywg")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vw71x"]
+atlas = ExtResource("2_j3ywg")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wk3cm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o8yba")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aagsv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7h66")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vw71x")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vbb8a"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x4t2t"]
+radius = 3.16228
+
+[node name="BirdEnemy" type="Node2D"]
+script = ExtResource("1_lk40s")
+
+[node name="TargetArea" type="Area2D" parent="."]
+collision_mask = 2
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TargetArea"]
+modulate = Color(1, 0, 1, 0.517647)
+top_level = true
+position = Vector2(0, -38.5)
+shape = SubResource("RectangleShape2D_ftjin")
+debug_color = Color(0.912513, 0.283821, 0.197758, 0.42)
+
+[node name="Character" type="CharacterBody2D" parent="."]
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_goi45")
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="Character"]
+sprite_frames = SubResource("SpriteFrames_wk3cm")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="Character"]
+debug_enabled = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Character"]
+position = Vector2(0, 7)
+shape = SubResource("CircleShape2D_vbb8a")
+debug_color = Color(0.0524461, 0.611623, 0.617675, 0.42)
+
+[node name="reset_nav_path" type="Timer" parent="Character"]
+wait_time = 0.5
+autostart = true
+
+[node name="Killzone" type="Killzone" parent="Character"]
+damage = 2
+collision_mask = 2
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Character/Killzone"]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_x4t2t")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Timer" type="Timer" parent="Character/Killzone"]
+wait_time = 0.6
+one_shot = true
+
+[connection signal="body_entered" from="TargetArea" to="Character" method="_on_target_area_body_entered"]
+[connection signal="body_exited" from="TargetArea" to="Character" method="_on_target_area_body_exited"]
+[connection signal="state_changed" from="Character" to="Character" method="_on_state_changed"]
