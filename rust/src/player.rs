@@ -13,6 +13,8 @@ pub struct Player {
     health: i32,
     #[export]
     state: PlayerState,
+    #[export]
+    is_invulnerable: bool,
 
     timer: Option<Gd<Timer>>,
     animator: Option<Gd<AnimatedSprite2D>>,
@@ -28,6 +30,7 @@ pub enum PlayerState {
     Jumping,
     Hurt,
     Dead,
+    Invulnerable,
 }
 
 #[godot_api]
@@ -41,7 +44,7 @@ impl Player {
 
     #[func]
     pub fn take_damage(&mut self, amount: i32) {
-        if self.state == PlayerState::Dead {
+        if self.state == PlayerState::Dead || self.state == PlayerState::Hurt || self.is_invulnerable {
             return;
         }
 
@@ -157,6 +160,7 @@ impl ICharacterBody2D for Player {
             timer: None,
             animator: None,
             state: PlayerState::Idle,
+            is_invulnerable: false,
             base,
         }
     }

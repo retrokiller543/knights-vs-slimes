@@ -5,8 +5,8 @@
 [ext_resource type="Script" path="res://scripts/bird_target_zone.gd" id="2_gj42u"]
 [ext_resource type="Texture2D" uid="uid://xe0tiubpg3s2" path="res://assets/sprites/BirdSprite.png" id="3_2a2iy"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ftjin"]
-size = Vector2(564, 247)
+[sub_resource type="CircleShape2D" id="CircleShape2D_5luro"]
+radius = 256.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jwkqe"]
 atlas = ExtResource("3_2a2iy")
@@ -132,15 +132,12 @@ priority = 1
 script = ExtResource("2_gj42u")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TargetArea"]
-visible = false
 modulate = Color(0, 0.695602, 0.816541, 0.517647)
-top_level = true
 position = Vector2(0, 3.5)
-shape = SubResource("RectangleShape2D_ftjin")
-debug_color = Color(0.913725, 0.282353, 0.196078, 0)
+shape = SubResource("CircleShape2D_5luro")
+debug_color = Color(0.913725, 0.282353, 0.196078, 1)
 
 [node name="reset_nav_path" type="Timer" parent="TargetArea"]
-wait_time = 2.0
 autostart = true
 
 [node name="Character" type="CharacterBody2D" parent="."]
@@ -157,7 +154,11 @@ frame_progress = 0.690567
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="Character"]
 process_priority = 2
+path_desired_distance = 10.0
+target_desired_distance = 4.0
 avoidance_enabled = true
+radius = 30.0
+debug_enabled = true
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Character"]
 position = Vector2(0, 4)

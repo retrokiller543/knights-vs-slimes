@@ -55,8 +55,10 @@ func _physics_process(_delta) -> void:
 	else:
 		move_with_collision_avoidance()
 
-	if global_position.distance_to(home_point) < 1.0 and state == State.HOME:
+	if global_position.distance_to(home_point) < 1.0 and state == State.HOME and is_on_floor():
 		animated_sprite.play("idle")
+	else:
+		animated_sprite.play("flying")
 
 func move_with_collision_avoidance() -> void:
 	if nav_agent.is_navigation_finished():
